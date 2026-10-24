@@ -9,7 +9,7 @@ clients = set()
 
 async def handler(websocket):
     clients.add(websocket)
-    print("Клиент ушел")
+    print("Клиент пришел")
 
     try:
         async for message in websocket:
