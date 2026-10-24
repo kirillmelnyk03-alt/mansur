@@ -3,13 +3,13 @@ import asyncio
 import json
 import websockets
 
-# Усі активні підключення
+
 clients = set()
 
 
 async def handler(websocket):
     clients.add(websocket)
-    print("Клієнт підключився")
+    print("Клиент ушел")
 
     try:
         async for message in websocket:
@@ -22,13 +22,13 @@ async def handler(websocket):
                 }))
                 continue
 
-            # Отримуємо повідомлення від клієнта
+
             response = {
                 "type": "message",
                 "data": data
             }
 
-            # Надсилаємо всім підключеним клієнтам
+
             results = await asyncio.gather(
                 *[
                     client.send(json.dumps(response))
@@ -37,7 +37,7 @@ async def handler(websocket):
                 return_exceptions=True
             )
 
-            # Видаляємо клієнтів, яким не вдалося надіслати дані
+
             for client, result in zip(list(clients), results):
                 if isinstance(result, Exception):
                     clients.discard(client)
@@ -47,7 +47,7 @@ async def handler(websocket):
 
     finally:
         clients.discard(websocket)
-        print("Клієнт відключився")
+        print("Клиент ушел")
 
 
 async def main():
